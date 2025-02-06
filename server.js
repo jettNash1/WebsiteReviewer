@@ -295,7 +295,7 @@ const interpretResults = (results, pageDetails) => {
                     locations: relatedElements.map(el => ({
                         element: `${el.tagName}${el.id ? '#' + el.id : ''}${el.className ? '.' + el.className : ''}`,
                         position: `at (${el.rect.x}, ${el.rect.y})`,
-                        preview: el.text.substring(0, 50)
+                        preview: el.text?.substring(0, 50) || ''
                     }))
                 };
                 
@@ -488,14 +488,14 @@ const analyzeWebsite = (pageDetails) => {
             issues.visual.push({
                 severity: 'Moderate',
                 message: `Small text (${element.styles.fontSize}) detected`,
-                element: element.text.substring(0, 50),
+                element: element.text?.substring(0, 50) || '',
                 location: element.rect,
                 suggestion: 'Increase font size to at least 12px for readability'
             });
         }
 
         // UX Issues
-        if (element.tagName === 'a' && element.text.length < 4) {
+        if (element.tagName === 'a' && element.text?.length < 4) {
             issues.ux.push({
                 severity: 'Minor',
                 message: 'Link text too short or non-descriptive',

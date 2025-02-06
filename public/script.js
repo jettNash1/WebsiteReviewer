@@ -17,7 +17,7 @@ document.getElementById('urlForm').addEventListener('submit', async (e) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ url: urlInput.value }),
+            body: JSON.stringify({ url: urlInput.value?.trim() }),
         });
         
         const data = await response.json();
@@ -26,37 +26,45 @@ document.getElementById('urlForm').addEventListener('submit', async (e) => {
             throw new Error(data.details || data.error || 'Failed to analyze website');
         }
         
+        // Validate required data before processing
+        if (!data || typeof data !== 'object') {
+            throw new Error('Invalid response data received');
+        }
+        
         // Show results container first
         results.classList.remove('hidden');
         
-        // Update summary
+        // Update summary with safe HTML encoding
         summary.innerHTML = `
             <h3>Analysis Summary</h3>
-            <p>${data.summary}</p>
+            <p>${data.summary ? data.summary.replace(/</g, '&lt;').replace(/>/g, '&gt;') : 'No summary available'}</p>
         `;
         
-        // Update scorecard
+        // Update scorecard with null checks
         scorecardContainer.innerHTML = '';
-        Object.entries(data.scorecard).forEach(([category, score]) => {
-            const severityClass = score >= 8 ? 'good' : 
-                                 score >= 6 ? 'minor' :
-                                 score >= 4 ? 'moderate' : 'critical';
-            
-            // Convert category name to title case
-            const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1);
-            
-            scorecardContainer.innerHTML += `
-                <div class="score-card ${severityClass}">
-                    <h4>${categoryTitle}</h4>
-                    <div class="score-details">
-                        <div class="score-value">${score}/10</div>
-                        <div class="issue-count">
-                            ${data.issues[category]?.length || 0} issues
+        if (data.scorecard && typeof data.scorecard === 'object') {
+            Object.entries(data.scorecard).forEach(([category, score]) => {
+                if (category && score != null) {
+                    const severityClass = score >= 8 ? 'good' : 
+                                        score >= 6 ? 'minor' :
+                                        score >= 4 ? 'moderate' : 'critical';
+                    
+                    const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1);
+                    
+                    scorecardContainer.innerHTML += `
+                        <div class="score-card ${severityClass}">
+                            <h4>${categoryTitle}</h4>
+                            <div class="score-details">
+                                <div class="score-value">${score}/10</div>
+                                <div class="issue-count">
+                                    ${(data.issues?.[category]?.length || 0)} issues
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            `;
-        });
+                    `;
+                }
+            });
+        }
         
         // Add screenshot viewer before updating accordion
         if (data.screenshot) {
@@ -84,52 +92,58 @@ document.getElementById('urlForm').addEventListener('submit', async (e) => {
             );
         }
         
-        // Update issues accordion
+        // Update issues accordion with additional validation
         issuesAccordion.innerHTML = '';
-        Object.entries(data.issues).forEach(([category, issues]) => {
-            if (issues.length === 0) return;
-            
-            const showIssueDetails = (issue) => `
-                <div class="issue-details">
-                    <div class="issue-location">
-                        <strong>Location:</strong> 
-                        <code>${issue.element}</code>
-                        <span class="coordinates">(${issue.location.x}, ${issue.location.y})</span>
+        if (data.issues && typeof data.issues === 'object') {
+            Object.entries(data.issues).forEach(([category, issues]) => {
+                if (!Array.isArray(issues) || issues.length === 0) return;
+                
+                const showIssueDetails = (issue) => {
+                    if (!issue) return '';
+                    return `
+                        <div class="issue-details">
+                            <div class="issue-location">
+                                <strong>Location:</strong> 
+                                <code>${issue.element || 'Unknown element'}</code>
+                                ${issue.location ? `<span class="coordinates">(${issue.location.x || 0}, ${issue.location.y || 0})</span>` : ''}
+                            </div>
+                            <div class="issue-message">${issue.message || 'No message available'}</div>
+                            <div class="issue-suggestion">
+                                <strong>Suggestion:</strong> ${issue.suggestion || 'No suggestion available'}
+                            </div>
+                        </div>
+                    `;
+                };
+                
+                const issuesList = issues.map(issue => `
+                    <li class="issue-item">
+                        <div class="issue-severity severity-${issue.severity.toLowerCase()}">
+                            ${issue.severity}
+                        </div>
+                        ${showIssueDetails(issue)}
+                    </li>
+                `).join('');
+                
+                issuesAccordion.innerHTML += `
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>${category} Issues</span>
+                            <span class="issue-count">${issues.length}</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ul class="issue-list">
+                                ${issuesList}
+                            </ul>
+                        </div>
                     </div>
-                    <div class="issue-message">${issue.message}</div>
-                    <div class="issue-suggestion">
-                        <strong>Suggestion:</strong> ${issue.suggestion}
-                    </div>
-                </div>
-            `;
-            
-            const issuesList = issues.map(issue => `
-                <li class="issue-item">
-                    <div class="issue-severity severity-${issue.severity.toLowerCase()}">
-                        ${issue.severity}
-                    </div>
-                    ${showIssueDetails(issue)}
-                </li>
-            `).join('');
-            
-            issuesAccordion.innerHTML += `
-                <div class="accordion-item">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <span>${category} Issues</span>
-                        <span class="issue-count">${issues.length}</span>
-                    </div>
-                    <div class="accordion-content">
-                        <ul class="issue-list">
-                            ${issuesList}
-                        </ul>
-                    </div>
-                </div>
-            `;
-        });
+                `;
+            });
+        }
         
     } catch (error) {
         console.error('Error:', error);
         alert(`Analysis failed: ${error.message}`);
+        results.classList.add('hidden'); // Hide results on error
     } finally {
         loadingIndicator.classList.add('hidden');
     }
