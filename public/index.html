@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Design Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+    <main class="container">
+        <h1>Website Design Analyzer</h1>
+        <form id="urlForm" class="review-form">
+            <div class="input-group">
+                <label for="urlInput">Enter Website URL:</label>
+                <input 
+                    type="url" 
+                    id="urlInput" 
+                    name="url" 
+                    required 
+                    placeholder="https://example.com"
+                    aria-label="Enter the website URL you want to analyze"
+                >
+            </div>
+            <button 
+                type="submit" 
+                class="submit-btn"
+                aria-label="Analyze website"
+            >
+                Analyze Website
+            </button>
+        </form>
+
+        <div id="loadingIndicator" class="loading hidden">
+            <span class="loader"></span>
+            <p>Analyzing website design...</p>
+        </div>
+
+        <div id="results" class="results hidden">
+            <h2>Analysis Results</h2>
+            <div id="summary" class="summary-card"></div>
+            
+            <div class="scorecard">
+                <h3>Design Scorecard</h3>
+                <div id="scorecardContainer" class="scorecard-grid"></div>
+            </div>
+
+            <!-- Screenshot viewer will be inserted here -->
+
+            <div class="issues-container">
+                <h3>Detailed Issues</h3>
+                <div id="issuesAccordion" class="accordion"></div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html> 
