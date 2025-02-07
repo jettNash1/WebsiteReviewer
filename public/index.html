@@ -8,9 +8,9 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-    <main class="container">
-        <h1>Website Design Analyzer</h1>
-        <form id="urlForm" class="review-form">
+    <main class="container" style="margin: 0; max-width: none;">
+        <h1 style="text-align: left;">Website Design Analyzer</h1>
+        <form id="urlForm" class="review-form" style="margin-left: 0;">
             <div class="input-group">
                 <label for="urlInput">Enter Website URL:</label>
                 <input 
@@ -31,25 +31,25 @@
             </button>
         </form>
 
-        <div id="loadingIndicator" class="loading hidden">
-            <span class="loader"></span>
-            <p>Analyzing website design...</p>
+        <div id="loadingIndicator" class="loading-container hidden">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Analyzing website design...</div>
         </div>
 
-        <div id="results" class="results hidden">
+        <div id="results" class="results hidden" style="margin: 0; text-align: left;">
             <h2>Analysis Results</h2>
-            <div id="summary" class="summary-card"></div>
+            <div id="summary" class="summary-card" style="margin-left: 0;"></div>
             
-            <div class="scorecard">
-                <h3>Design Scorecard</h3>
-                <div id="scorecardContainer" class="scorecard-grid"></div>
-            </div>
+            <div class="analysis-container" style="margin: 0;">
+                <div class="scorecard" style="margin-left: 0;">
+                    <h3>Design Scorecard</h3>
+                    <div id="scorecardContainer" class="scorecard-grid" style="margin-left: 0;"></div>
+                </div>
 
-            <!-- Screenshot viewer will be inserted here -->
-
-            <div class="issues-container">
-                <h3>Detailed Issues</h3>
-                <div id="issuesAccordion" class="accordion"></div>
+                <div class="issues-container" style="margin-left: 0;">
+                    <h3>Detailed Issues</h3>
+                    <div id="issuesAccordion" class="accordion"></div>
+                </div>
             </div>
         </div>
     </main>

@@ -19,12 +19,20 @@ body {
     line-height: 1.5;
     margin: 0;
     padding: 0;
+    width: 100vw;
+    overflow-x: hidden;
+    max-width: 100vw;
 }
 
 .container {
-    max-width: 1000px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    width: 100vw;
+    max-width: none;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: left;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .review-form {
@@ -33,10 +41,14 @@ body {
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
+    width: 100%;
+    margin: 0 0 2rem 0;
+    text-align: left;
 }
 
 .input-group {
     margin-bottom: 1rem;
+    padding: 0;
 }
 
 label {
@@ -51,6 +63,7 @@ input[type="url"] {
     border: 1px solid var(--border-color);
     border-radius: 4px;
     font-size: 1rem;
+    background-color: #f0f5ff;
 }
 
 .submit-btn {
@@ -84,11 +97,13 @@ input[type="url"] {
 }
 
 .results {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    margin-top: 2rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 100vw;
+    max-width: none;
+    margin: 0;
+    padding: 1rem;
+    text-align: left;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .summary-card {
@@ -97,17 +112,33 @@ input[type="url"] {
     border-radius: 8px;
     margin-bottom: 2rem;
     border-left: 4px solid var(--primary-color);
+    width: 100vw;
+    max-width: none;
+    margin: 0;
+    padding: 1rem;
+    max-width: 100%;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .scorecard {
     margin-bottom: 2rem;
+    width: 100vw;
+    max-width: none;
+    margin: 0;
+    padding: 1rem;
+    max-width: 100%;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .scorecard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
-    margin-top: 1rem;
+    margin: 0;
+    padding: 0;
+    justify-items: start;
 }
 
 .score-card {
@@ -117,6 +148,13 @@ input[type="url"] {
     border: 1px solid var(--border-color);
     position: relative;
     overflow: hidden;
+    width: 100vw;
+    max-width: none;
+    margin: 0;
+    padding: 1rem;
+    max-width: 100%;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .score-card::before {
@@ -290,61 +328,72 @@ input[type="url"] {
     background: white;
 }
 
-.screenshot-container {
+.screenshot-section {
+    width: 100%;
     position: relative;
-    max-width: 100%;
-    max-height: 800px;
-    overflow: auto;
-    background: #f8fafc;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.screenshot-container {
+    width: 100%;
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: #fff;
+    padding: 0;
+}
+
+.screenshot-wrapper {
+    position: relative;
+    min-width: 1920px; /* Base size for most desktop screens */
+    width: max-content;
+    height: auto;
 }
 
 .screenshot-container img {
-    max-width: 100%;
+    width: 100%;
     height: auto;
     display: block;
-}
-
-.screenshot-container::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-.screenshot-container::-webkit-scrollbar-track {
-    background: var(--border-color);
-    border-radius: 4px;
-}
-
-.screenshot-container::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 4px;
-}
-
-.screenshot-container::-webkit-scrollbar-thumb:hover {
-    background: #1d4ed8;
+    margin: 0;
 }
 
 .issue-overlay {
     position: absolute;
-    width: 24px;
-    height: 24px;
-    transform: translate(-50%, -50%);
+    z-index: 100;
+    border: 2px solid red;
+    background: rgba(255, 0, 0, 0.1);
+    pointer-events: auto;
     cursor: pointer;
-    transition: all 0.3s ease;
 }
 
-.issue-marker {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 2px solid currentColor;
-    background: rgba(255, 255, 255, 0.9);
-    transition: all 0.3s ease;
+.issue-label {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    background: red;
+    color: white;
+    padding: 2px 4px;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+/* Custom scrollbar styles */
+.screenshot-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.screenshot-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.screenshot-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.screenshot-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .cluster-count {
@@ -410,7 +459,7 @@ input[type="url"] {
     border-top: 1px solid var(--border-color);
     display: flex;
     gap: 0.5rem;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .zoom-btn {
@@ -447,10 +496,155 @@ input[type="url"] {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.screenshot-section {
-    margin: 2rem 0;
-}
-
 .screenshot-section h3 {
     margin-bottom: 1rem;
+}
+
+.analysis-container {
+    width: 100vw;
+    max-width: none;
+    margin: 0;
+    padding: 1rem;
+    text-align: left;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 1920px) {
+    .container {
+        padding: 20px;
+        margin: 0;
+    }
+}
+
+@media (max-width: 1440px) {
+    .container {
+        padding: 15px;
+        margin: 0;
+    }
+    
+    .screenshot-container {
+        margin: 10px 0;
+    }
+
+    .results {
+        padding: 1rem;
+    }
+}
+
+/* Ensure proper box-sizing throughout */
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+/* Center only the title */
+h1 {
+    text-align: left;
+    margin: 0 0 20px 0;
+}
+
+/* Remove any flex centering */
+.screenshot-controls {
+    justify-content: flex-start;
+}
+
+/* Update media queries */
+@media (max-width: 1920px) {
+    .container {
+        padding: 20px;
+        margin: 0;
+    }
+}
+
+@media (max-width: 1440px) {
+    .container {
+        padding: 15px;
+        margin: 0;
+    }
+}
+
+/* Remove any centering from headings */
+h2, h3, h4 {
+    text-align: left;
+    margin-left: 0;
+}
+
+/* Add these overrides at the end of your styles.css */
+.container, 
+.container *,
+.results,
+.results *,
+.screenshot-section,
+.screenshot-section *,
+.analysis-container,
+.analysis-container * {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+}
+
+/* Remove any flex centering */
+[class*="flex"],
+[style*="flex"] {
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+}
+
+/* Loading container styles */
+.loading-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center !important;
+    align-items: center !important;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 1000;
+}
+
+/* Hidden state */
+.hidden {
+    display: none !important;
+}
+
+/* Loading spinner styles */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Loading text styles */
+.loading-text {
+    font-size: 16px;
+    color: #333;
+    text-align: center !important;
+    margin: 20px 0 0 0 !important;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Override any conflicting styles */
+.loading-container,
+.loading-container * {
+    text-align: center !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
 } 
